@@ -17,3 +17,6 @@
 
 invoices/
 vendor/
+
+.idea/
+.vscode/

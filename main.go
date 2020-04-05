@@ -11,12 +11,12 @@ const defaultPort = "8080"
 const defaultHost = "0.0.0.0"
 
 func main() {
-	host := os.Getenv("HOST")
+	host := os.Getenv("FAKTUR_HOST")
 	if host == "" {
 		host = defaultHost
 	}
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("FAKTUR_PORT")
 	if port == "" {
 		port = defaultPort
 	}

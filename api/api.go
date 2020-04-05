@@ -38,33 +38,21 @@ func New() (*echo.Echo, error) {
 
 	log.Println("Launched", conf.Workers, "workers")
 
-	e.GET("/", func(c echo.Context) error {
-		invoice := data.Invoice{}
-
-		if err := invoice.Sanitize(); err != nil {
-			return err
-		}
-
-		ch <- invoice
-
-		return c.JSON(http.StatusAccepted, map[string]interface{}{
-			"id":  invoice.UUID,
-			"uri": fmt.Sprintf("/invoices/%s.pdf", invoice.UUID),
-		})
-	})
-
 	e.POST("/", func(c echo.Context) error {
 		var invoice data.Invoice
 
 		if err := c.Bind(&invoice); err != nil {
 			return err
 		}
-
 		if err := invoice.Sanitize(); err != nil {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, &invoice)
+		ch <- invoice
+		return c.JSON(http.StatusAccepted, map[string]interface{}{
+			"id":  invoice.UUID,
+			"uri": fmt.Sprintf("/invoices/%s.pdf", invoice.UUID),
+		})
 	})
 
 	return e, nil

@@ -24,7 +24,10 @@ func generateInvoice(invoice *data.Invoice, conf *config) error {
 		return err
 	}
 
-	pdfGen.AddPage(wkhtmltopdf.NewPageReader(ioutil.NopCloser(&buff)))
+	page := wkhtmltopdf.NewPageReader(ioutil.NopCloser(&buff))
+	page.CacheDir.Set(conf.CacheDir)
+
+	pdfGen.AddPage(page)
 	if err = pdfGen.Create(); err != nil {
 		return err
 	}
