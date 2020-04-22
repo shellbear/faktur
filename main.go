@@ -8,7 +8,7 @@ import (
 )
 
 const defaultPort = "8080"
-const defaultHost = "0.0.0.0"
+const defaultHost = "127.0.0.1"
 
 func main() {
 	host := os.Getenv("FAKTUR_HOST")

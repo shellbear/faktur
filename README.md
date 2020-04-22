@@ -19,7 +19,7 @@
 
 ---
 
-## Get Faktur
+## Installation
 
 With go CLI:
 ```shell script
@@ -29,7 +29,11 @@ go build -o faktur .
 
 With docker:
 ```shell script
-docker run -p 8080:8080 docker.pkg.github.com/shellbear/faktur/faktur
+docker run        \
+  --name faktur   \
+  -p 8080:8080    \
+  -d              \
+  docker.pkg.github.com/shellbear/faktur/faktur
 ```
 
 Or download binary from the release [page](https://github.com/shellbear/faktur/releases).
@@ -38,8 +42,57 @@ Or download binary from the release [page](https://github.com/shellbear/faktur/r
 
 ![faktur](.github/images/faktur.png)
 
-## Build with
+## Api
 
+`POST /`
+```json
+{
+  "title": "January Invoice",
+  "date": "",
+  "due_date": "",
+  "currency": "$",
+  "company": {
+    ....
+  },
+  "customer": {
+    ....
+  },
+  "items": [
+    ....
+  ],
+  "notes": "Payment should be done with bank transfer."
+}
+```
+
+## Environment variables
+
+##### `FAKTUR_HOST`
+
+Faktur service host address. Defaults to `127.0.0.1`.
+
+##### `FAKTUR_PORT`
+
+Faktur service port. Defaults to `8080`.
+
+##### `FAKTUR_WORKERS`
+
+The number of workers (used to create invoices). Defaults to `4`.
+
+##### `FAKTUR_INVOICE_DIR`
+
+The folder used to store invoices. Defaults to `./invoices`.
+
+##### `FAKTUR_TEMPLATE_DIR`
+
+An optional directory which contains additional invoice templates. Empty by default.
+
+##### `FAKTUR_CACHE_DIR`
+
+The cache folder for wkhtmltopdf. Defaults to `/tmp/cache-wk/`.
+
+## Built with
+
+- [pkger](https://github.com/markbates/pkger)
 - [go-wkhtmltopdf](https://github.com/SebastiaanKlippert/go-wkhtmltopdf)
 - [basscss](https://github.com/basscss/basscss)
 

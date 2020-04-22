@@ -25,3 +25,5 @@ faktur
 .vscode/
 
 .DS_store
+
+pkged.go

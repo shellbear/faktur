@@ -1,10 +1,17 @@
 package api
 
 import (
+	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"os"
+	"path"
+	"path/filepath"
 	"strconv"
+	"strings"
+
+	"github.com/markbates/pkger"
 )
 
 type config struct {
@@ -14,22 +21,103 @@ type config struct {
 	// Root folder of generated invoices
 	InvoiceDir string
 
-	// The default template to use for invoice generation
-	TemplatePath string
+	// An optional directory for additional templates
+	TemplateDir string
 
 	// The directory used to cache wkhtmltopdf web assets
 	CacheDir string
 
-	// Template content, read from Template path
+	// Templates content, read from Template path
 	Template *template.Template
 }
 
 const (
 	defaultWorkers    = "4"
 	defaultInvoiceDir = "./invoices"
-	defaultTemplate   = "./templates/invoice.html"
 	defaultCacheDir   = "/tmp/cache-wk/"
 )
+
+func getFileName(filePath string) string {
+	basename := path.Base(filePath)
+	return strings.TrimSuffix(basename, path.Ext(basename))
+}
+
+func parseTemplate(t *template.Template, file io.Reader, path string) (*template.Template, error) {
+	var tmpl *template.Template
+
+	templateName := getFileName(path)
+	if t == nil {
+		t = template.New(templateName)
+	}
+
+	if t.Name() == templateName {
+		tmpl = t
+	} else {
+		tmpl = t.New(templateName)
+	}
+
+	templateContent, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = tmpl.Parse(string(templateContent))
+	return t, err
+}
+
+func getCustomTemplates(t *template.Template, dir string) (*template.Template, error) {
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() {
+			file, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+
+			if t, err = parseTemplate(t, file, path); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return t, nil
+}
+
+func getDefaultTemplates(t *template.Template) (*template.Template, error) {
+	err := pkger.Walk("/templates", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() {
+			file, err := pkger.Open(path)
+			if err != nil {
+				return err
+			}
+
+			if t, err = parseTemplate(t, file, path); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return t, nil
+}
 
 // getConfig parse environment variables and will set a default value for each one if none is set.
 func getConfig() (*config, error) {
@@ -43,11 +131,6 @@ func getConfig() (*config, error) {
 		invoiceDir = defaultInvoiceDir
 	}
 
-	templatePath := os.Getenv("FAKTUR_TEMPLATE")
-	if templatePath == "" {
-		templatePath = defaultTemplate
-	}
-
 	cacheDir := os.Getenv("FAKTUR_CACHE_DIR")
 	if cacheDir == "" {
 		cacheDir = defaultCacheDir
@@ -58,21 +141,29 @@ func getConfig() (*config, error) {
 		return nil, err
 	}
 
-	templateContent, err := ioutil.ReadFile(templatePath)
+	tmpl, err := getDefaultTemplates(nil)
 	if err != nil {
 		return nil, err
 	}
 
-	tmpl, err := template.New("default").Parse(string(templateContent))
-	if err != nil {
-		return nil, err
+	templateDir := os.Getenv("FAKTUR_TEMPLATE_DIR")
+	if templateDir != "" {
+		if tmpl, err = getCustomTemplates(tmpl, templateDir); err != nil {
+			return nil, err
+		}
+	}
+
+	if tmpl != nil {
+		for i, temp := range tmpl.Templates() {
+			fmt.Printf("%d: %s\n", i, temp.Name())
+		}
 	}
 
 	return &config{
-		Workers:      uint8(workersNb),
-		InvoiceDir:   invoiceDir,
-		TemplatePath: templatePath,
-		CacheDir:     cacheDir,
-		Template:     tmpl,
+		Workers:     uint8(workersNb),
+		InvoiceDir:  invoiceDir,
+		TemplateDir: templateDir,
+		CacheDir:    cacheDir,
+		Template:    tmpl,
 	}, nil
 }
