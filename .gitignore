@@ -23,6 +23,7 @@ faktur
 
 .idea/
 .vscode/
+faktur.code-workspace
 
 .DS_store
 
