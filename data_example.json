@@ -1,0 +1,50 @@
+{
+    "title": "StoneCrete Test Invoice",
+    "date": "2023-05-15T12:30:05.371Z",
+    "due_date": "2023-05-27T12:30:05.371Z",
+    "currency": "$",
+    "contractor": {
+      "logo": "https://uploads-ssl.webflow.com/641df2696f3c0a1aedc2c727/6463134f551142e3348427ba_stonecrete-black-logo-500px.png",
+      "business_name": "StoneCrete Inc,",
+      "phone": "(407)640-2333",
+      "email": "office@stonecreteflooring.com",
+      "registration_number": "N/A",
+      "address": {
+        "address": "7901 4Th St N Ste 300", 
+	      "city": "St. Petersburg",
+        "state": "FL",
+        "zip_code": "33702"
+      }
+    },
+    "customer": {
+      "full_name": "Bob Villa",
+      "phone": "(689)250-4444",
+      "email": "example@example.com",
+      "terms": "35% Upfront & COD",
+      "address": {
+        "address": "212 Ronnie St", 
+	      "city": "Somewhere",
+        "state": "FL",
+        "zip_code": "33233"
+      },
+      "amount_paid": "50.00",
+      "customer_notes": "Payments accepted: bank transfer, check, or credit cards"
+    },
+    "items": [
+
+      {
+        "item_number": "2005",
+        "description": "Additional clear urethane top coat",
+        "rate": 200.41,
+        "quantity": 1.0,
+        "tax_rate": 0.07
+      },
+      {
+        "item_number": "4002",
+        "description": "Epoxy Metallic blue and clear urethane coat",
+        "rate": 1400.25,
+        "quantity": 2.0,
+        "tax_rate": 0.07
+      }
+    ]
+}
