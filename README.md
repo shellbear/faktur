@@ -44,23 +44,62 @@ Or download binary from the release [page](https://github.com/shellbear/faktur/r
 
 ## Api
 
-`POST /`
+```
+$ curl --header "Content-Type: application/json" \
+    --request POST \
+    --data-binary @data_example.json \
+    http://localhost:8080/
+```
 ```json
 {
-  "title": "January Invoice",
-  "date": "",
-  "due_date": "",
-  "currency": "$",
-  "company": {
-    ....
-  },
-  "customer": {
-    ....
-  },
-  "items": [
-    ....
-  ],
-  "notes": "Payment should be done with bank transfer."
+    "title": "StoneCrete Flooring - Invoice",
+    "date": "2023-05-15T12:30:05.371Z",
+    "due_date": "2023-05-27T12:30:05.371Z",
+    "currency": "$",
+    "contractor": {
+      "logo": "https://type_your_link_here.com",
+      "business_name": "StoneCrete Inc,",
+      "phone": "(407)640-2333",
+      "email": "office@stonecreteflooring.com",
+      "registration_number": "N/A",
+      "address": {
+        "address": "7901 4Th St N Ste 300", 
+	      "city": "St. Petersburg",
+        "state": "FL",
+        "zip_code": "33702"
+      }
+    },
+    "customer": {
+      "full_name": "Acme Inc,",
+      "phone": "(689)250-4444",
+      "email": "example@example.com",
+      "terms": "NET60",
+      "address": {
+        "address": "212 Ronnie St", 
+	      "city": "Somewhere",
+        "state": "FL",
+        "zip_code": "33233"
+      },
+      "amount_paid": "50.00",
+      "customer_notes": "Payments accepted: wire transfer, check, or credit card."
+    },
+    "items": [
+
+      {
+        "item_number": "2005",
+        "description": "Additional clear urethane top coat",
+        "rate": 200.41,
+        "quantity": 1.0,
+        "tax_rate": 0.07
+      },
+      {
+        "item_number": "4002",
+        "description": "Epoxy Metallic blue and clear urethane coat",
+        "rate": 1400.25,
+        "quantity": 2.0,
+        "tax_rate": 0.07
+      }
+    ]
 }
 ```
 
@@ -94,7 +133,8 @@ The cache folder for wkhtmltopdf. Defaults to `/tmp/cache-wk/`.
 
 - [pkger](https://github.com/markbates/pkger)
 - [go-wkhtmltopdf](https://github.com/SebastiaanKlippert/go-wkhtmltopdf)
-- [basscss](https://github.com/basscss/basscss)
+- <del>[basscss](https://github.com/basscss/basscss)</del>
+- [getbase](https://getbase.org/)
 
 ## Credits
 
@@ -104,5 +144,6 @@ The cache folder for wkhtmltopdf. Defaults to `/tmp/cache-wk/`.
 ## License
 
 © shellbear, 2020~time.Now
+© StoneCrete, 2023~time.Now
 
 Released under the [MIT License](LICENSE).
