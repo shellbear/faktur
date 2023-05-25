@@ -1,12 +1,26 @@
 package data
 
-// Person represents someone, can be your company or the customer.
-type Person struct {
+// Customer represents some individual or business customer.
+type Customer struct {
+	// The company or person name
+	FullName   string  `json:"full_name"`
+	Phone      string  `json:"phone"`
+	Email      string  `json:"email"`
+	Address    Address `json:"address"`
+	Terms      string  `json:"terms"`
+	AmountPaid string  `json:"amount_paid"`
+
+	// Customer notes go here! these notes are also mapped to Invoice notes.
+	Notes string `json:"customer_notes"`
+}
+
+// Corporate represents the 'contractor', entity issuing the invoice.
+type Contractor struct {
 	// A logo, can be an URL or a base64 encoded image string
 	Logo Image `json:"logo"`
 
-	// The company or person name
-	Title              string  `json:"title"`
+	// The business legal name
+	BusinessName       string  `json:"business_name"`
 	Phone              string  `json:"phone"`
 	Email              string  `json:"email"`
 	RegistrationNumber string  `json:"registration_number"`
