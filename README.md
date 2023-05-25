@@ -64,7 +64,7 @@ $ curl --header "Content-Type: application/json" \
       "registration_number": "N/A",
       "address": {
         "address": "7901 4Th St N Ste 300", 
-	      "city": "St. Petersburg",
+	    "city": "St. Petersburg",
         "state": "FL",
         "zip_code": "33702"
       }
@@ -76,7 +76,7 @@ $ curl --header "Content-Type: application/json" \
       "terms": "NET60",
       "address": {
         "address": "212 Ronnie St", 
-	      "city": "Somewhere",
+	    "city": "Somewhere",
         "state": "FL",
         "zip_code": "33233"
       },
