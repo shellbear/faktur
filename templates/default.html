@@ -1,124 +1,371 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Invoice {{if .ID}}#{{ .ID }}{{end}}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link href=" https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Example</title>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@getbase/base@5.2.0/index.min.css" media="screen">
     <style>
-      .dashed {
-        border: none;
-        border-bottom: 2px dashed #c5c5c5;
-      }
+        p {
+            margin: 0;
+        }
 
-      .secondary {
-        color: grey;
-      }
+        .page {
+            margin: 10pt auto;
+            position: relative;
+        }
 
-      h1, h2, h3, h4, p, span, div {
-        font-family: 'Roboto', sans-serif;
-      }
+        span.position,
+        p.paragraph {
+            position: absolute;
+            display: block;
+        }
+
+        span.position {
+            transform-origin: left;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        span.style {
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0px;
+        }
+
+        a.link {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        div.group,
+        div.textbox,
+        svg.graphic,
+        img.image,
+        div.rotation {
+            position: absolute;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media print {
+            @page {
+                size: 612.0pt 792.0pt;
+                margin: 0pt 0pt 0pt 0pt;
+            }
+
+            html,
+            body {
+                width: 612.0pt;
+                height: 792.0pt;
+                font-size: 10pt;
+            }
+        }
+
+        @media print {
+            .page {
+                margin: 0pt;
+            }
+        }
+
+        p.body-text {
+            font-family: Arial, serif;
+            font-size: 0.95rem;
+            color: #000000;
+        }
+
+        p.title {
+            font-family: Arial, serif;
+            font-size: 2.75rem;
+            color: #000000;
+        }
+
+        p.list-paragraph {
+            font-family: arial, serif;
+            font-size: 1.10rem;
+            color: #000000;
+        }
+
+        p.table-paragraph {
+            font-family: Arial, serif;
+            font-size: 1.10rem;
+            color: #000000;
+        }
     </style>
-  </head>
-  <body>
-    {{if .Company.Logo }}
-      <div>
-        <img src="{{ .Company.Logo }}" width="200px">
-      </div>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="grid-row">
+            {{if .Contractor.Logo}}
+            <div class="grid-col grid-col-5">
+                <img src="{{.Contractor.Logo}}" alt="logo" style="width: 15.00rem; left: 3.62rem; height: 3.08rem; padding-top: 1.17rem; padding-left: 2.35rem; display: block;" />
+            </div>
+            {{end}}
+
+            <div class="grid-col grid-col-6">
+                <p class="paragraph body-text"
+                    style="width: 14.07rem; height: 1.10rem; left: 4.80rem; top: 5.93rem; text-align: left; color: #333333; font-weight: 700;">
+                    StoneCrete Inc,</p>
+                <p class="paragraph body-text"
+                    style="width: 14.07rem; height: 1.20rem; left: 4.80rem; top: 7.27rem; text-align: left; color: #333333; font-weight: 400;">
+                    7901 4Th St N Suite 300</p>
+                <p class="paragraph body-text"
+                    style="width: 14.07rem; height: 1.20rem; left: 4.80rem; top: 8.46rem; text-align: left; color: #333333; font-weight: 400;">
+                    St Petersburg, FL 33702</p>
+                {{with .ID}}
+                <p class="paragraph title"
+                    style="width: 12.68rem; height: 3.11rem; font-size: 1.10rem; left: 46.13rem; top: 2.27rem; text-align: left; font-family: arial, serif; font-size: 2.60rem; color: #393939;">
+                    INVOICE</p>
+                <p class="paragraph body-text"
+                    style="width: 5.33rem; height: 1.62rem; font-size: 1.20rem; left: 52.48rem; top: 5.38rem; text-align: left; color: #767676; font-weight: 400;">
+                    #{{.FakturInvoiceId}}</p>{{end}}
+                <p class="paragraph body-text"
+                    style="width: 8.87rem; height: 1.64rem; left: 4.80rem; top: 12.56rem; text-align: left; color: #767676; font-weight: 400;">
+                    Bill To:</p>
+                {{if .Customer}}
+                <p class="paragraph body-text"
+                    style="width: 14.87rem; height: 4.14rem; left: 4.80rem; top: 13.90rem; text-align: left; color: #333333; font-weight: 700;">
+                    {{.Customer.FullName}}</p>
+                <p class="paragraph body-text"
+                    style="width: 11.58rem; height: 1.66rem; left: 4.80rem; top: 15.24rem; color: #333333; font-weight: 400;">
+                    {{.Customer.Address.Address}}</p>
+                <p class="paragraph body-text"
+                    style="width: 14.54rem; height: 1.76rem; left: 4.80rem; top: 16.58rem; color: #333333; font-weight: 400;">
+                    {{.Customer.Address.City}},{{.Customer.Address.State}} {{.Customer.Address.ZipCode}}</p>
+                <p class="paragraph body-text"
+                    style="width: 7.18rem; height: 4.67rem; left: 39.08rem; top: 10.56rem; text-align: right; font-family: arial, serif; font-size: 0.95rem; color: #767676;">
+                    Date:</p>
+                <p class="paragraph body-text" 
+                    style="width: 10.23rem; height: 6.84rem; font-size: 0.95rem; left: 47.00rem; top: 10.56rem; text-align: right; font-family: arial, serif;">
+                    {{.Date.Format "January 2, 2006"}}</p>
+                <p class="paragraph body-text"
+                    style="width: 10.18rem; height: 4.67rem; left: 36.08rem; top: 12.56rem; text-align: right; font-family: arial, serif; font-size: 0.95rem; color: #767676;">
+                    Payment Terms:</p>
+                <p class="paragraph body-text" 
+                    style="width: 10.23rem; height: 6.84rem; font-size: 0.95rem; left: 47.00rem; top: 12.56rem; text-align: right; font-family: arial, serif;">
+                    {{.Customer.Terms}}</p>
+                <p class="paragraph body-text"
+                    style="width: 10.18rem; height: 4.67rem; left: 36.08rem; top: 14.56rem; text-align: right; font-family: arial, serif; font-size: 0.95rem; color: #767676;">
+                    Due Date:</p>
+                 <p class="paragraph body-text" 
+                    style="width: 10.23rem; height: 6.84rem; font-size: 0.95rem; left: 47.00rem; top: 14.56rem; text-align: right; font-family: arial, serif;">
+                    {{.Date.Format "January 2, 2006"}}</p>{{end}}
+            </div>
+            
+            <div class="group"
+                style="width: 26.93rem; height: 2.55rem; display: block; left: 31.73rem; top: 17.02rem;">
+                <svg viewbox="0.000000, 0.000000, 269.250000, 25.500000" class="graphic"
+                    style="width: 26.93rem; height: 2.55rem; display: block; z-index: -10; left: 0.00rem; top: 0.00rem;">
+                    <path fill="#f4f4f4" fill-opacity="1.000000"
+                        d="M 266.25 25.5 L 3 25.5 L 1.83262 25.2641 L 0.878998 24.621 L 0.235874 23.6674 L 0 22.5 L 0 3 L 0.235874 1.83263 L 0.878998 0.879002 L 1.83262 0.235876 L 3 0 L 266.25 0 L 267.417 0.235876 L 268.371 0.879002 L 269.014 1.83263 L 269.25 3 L 269.25 22.5 L 269.014 23.6674 L 268.371 24.621 L 267.417 25.2641 L 266.25 25.5 Z"
+                        stroke="none" />
+                </svg>
+                <div class="textbox"
+                    style="width: 7.15rem; height: 1.13rem; display: block; z-index: -10; left: 7.50rem; top: 0.68rem;">
+                    <p class="paragraph body-text"
+                        style="width: 9.15rem; height: 1.06rem; z-index: -10; font-size: 1.10rem; left: -1.10rem; top: -0.00rem; text-align: left; color: #333333; font-weight: 700;">
+                        Balance Due:</p>
+                </div>
+                {{with .CalculateInvoice}}
+                <div class="textbox" style="width: 5.10rem; height: 1.13rem; display: block; z-index: -10; left: 18.02rem; top: 0.68rem;">
+                    <p class="paragraph body-text" style="width: 5.10rem; height: 1.06rem; z-index: -10; font-size: 1.10rem; left: 0.00rem; top: -0.00rem; text-align: left; color: #333333; font-weight: 700;">
+                        <span class="position style" style="width: 0.63rem; height: 1.13rem; left: 0.00rem; top: 0.00rem;">${{.BalanceDue}}</span>
+                    </p>
+                </div>
+                {{end}}
+            </div>
+            <div class="group"
+                style="width: 32.85rem; height: 2.10rem; display: block; left: 2.92rem; top: 23.02rem;">
+                <svg viewbox="0.000000, 0.000000, 328.500000, 21.000000" class="graphic"
+                    style="width: 32.85rem; height: 2.10rem; display: block; z-index: -10; left: 0.00rem; top: 0.00rem;">
+                    <path fill="#393939" fill-opacity="1.000000"
+                        d="M 328.5 21 L 3 21 L 1.83262 20.7641 L 0.879 20.121 L 0.235875 19.1674 L 0 18 L 0 3 L 0.235875 1.83262 L 0.879 0.878998 L 1.83262 0.235874 L 3 0 L 328.5 0 L 328.5 21 Z"
+                        stroke="none" />
+                </svg>
+                <div class="textbox"
+                    style="width: 32.85rem; height: 2.10rem; display: block; z-index: -10; left: 0.00rem; top: 0.00rem;">
+                    <p class="paragraph body-text"
+                        style="width: 31.35rem; height: 1.47rem; z-index: -10; left: 1.50rem; top: 0.50rem; text-align: left; color: #ffffff; font-weight: 400;">
+                        Item
+                    </p>
+                </div>
+                <div class="textbox"
+                    style="width: 32.85rem; height: 2.10rem; display: block; z-index: -10; left: 0.00rem; top: 0.00rem;">
+                    <p class="paragraph body-text"
+                        style="width: 31.35rem; height: 1.47rem; z-index: -10; left: 5.50rem; top: 0.50rem; text-align: left; color: #ffffff; font-weight: 400;">
+                        Description
+                    </p>
+                </div>
+            </div>
+            <div class="group"
+                style="width: 22.50rem; height: 2.10rem; display: block; left: 35.77rem; top: 23.02rem;">
+                <svg viewbox="0.000000, 0.000000, 75.000000, 21.000000" class="graphic"
+                    style="width: 7.50rem; height: 2.10rem; display: block; z-index: -10; left: 15.00rem; top: 0.00rem;">
+                    <path fill="#393939" fill-opacity="1.000000"
+                        d="M 72 21 L 0 21 L 0 0 L 72 0 L 73.1674 0.235874 L 74.121 0.878998 L 74.7641 1.83262 L 75 3 L 75 18 L 74.7641 19.1674 L 74.121 20.121 L 73.1674 20.7641 L 72 21 Z"
+                        stroke="none" />
+                </svg>
+                <div class="textbox"
+                    style="width: 7.50rem; height: 2.10rem; display: block; z-index: -10; left: 15.00rem; top: 0.00rem;">
+                    <p class="paragraph body-text"
+                        style="width: 4.88rem; height: 1.47rem; z-index: -10; left: 2.63rem; top: 0.50rem; text-align: left; color: #ffffff; font-weight: 400;">
+                        Amount
+                    </p>
+                </div>
+                <div class="textbox"
+                    style="background: #393939; width: 15.00rem; height: 2.10rem; display: block; z-index: -10; left: 0.00rem; top: 0.00rem;">
+                    <p class="paragraph body-text"
+                        style="width: 13.50rem; height: 1.47rem; z-index: -10; left: 1.50rem; top: 0.50rem; text-align: left; color: #ffffff; font-weight: 400;">
+                        Quantity
+                    </p>
+                    <p class="paragraph body-text"
+                        style="width: 13.50rem; height: 1.47rem; z-index: -10; left: 10.50rem; top: 0.50rem; text-align: left; color: #ffffff; font-weight: 400;">
+                        Rate
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="grid-row">
+            {{with .Items}}
+            <div class="grid-col">
+                <table class="table" style="width: 58.38rem; height: 2.00rem; padding-left: 3.80rem; position: fixed; top: 24.60rem;">
+                        {{ range . }}
+                        <tbody>
+                            <tr>
+                                <td style="border: none; height: 0.60rem;"/>
+                                <td style="border: none; height: 0.60rem;"/>
+                                <td style="border: none; height: 0.60rem;"/>                               
+                                <td style="border: none; height: 0.60rem;"/>                               
+                                <td style="border: none; height: 0.60rem;"/>                               
+                            </tr>
+                            <tr>
+                                <td rowspan="1" colspan="1" class="cell" style="width: 6.00rem; height: 1.51rem;">
+                                    <!-- <p class="paragraph table-paragraph" style="width: 3.50rem; height: 0.91rem; font-size: 0.95rem; left: -0.50rem; top: 0.00rem; text-align: right; color: #767676; font-weight: 400;"> -->
+                                    <p class="paragraph body-text" style="height: 0.91rem; text-align: right;">
+                                    <!-- <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 0.00rem; top: -0.00rem;">{{.ItemNumber}}</span> -->
+                                    {{.ItemNumber}}
+                                    </p>
+                                </td>
+                                <td rowspan="1" colspan="1" class="cell" style="width: 45.00rem; height: 1.51rem;">
+                                    <!-- <p class="paragraph table-paragraph" style="width: 45.16rem; height: 0.91rem; font-size: 0.95rem; left: 3.50rem; top: 0.00rem; text-align: right; color: #767676; font-weight: 400;"> -->
+                                    <p class="paragraph body-text" style="height: 0.91rem; text-align: right;">
+                                    <!-- <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 0.00rem; top: -0.00rem;">{{.Description}}</span> -->
+                                    {{.Description}}
+                                    </p>
+                                </td>
+                                <td rowspan="1" colspan="1" class="cell" style="width: 9.00rem; height: 1.51rem;">
+                                    <!-- <p class="paragraph table-paragraph" style="width: 6.16rem; height: 0.91rem; font-size: 0.95rem; left: 34.00rem; top: 0.00rem; text-align: right; color: #767676; font-weight: 400;"> -->
+                                    <p class="paragraph body-text" style="height: 0.91rem; text-align: right;">
+                                    <!-- <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 0.00rem; top: -0.00rem;">{{.Quantity}}</span> -->
+                                    {{.Quantity}}
+                                    </p>
+                                </td>
+                                <td rowspan="1" colspan="1" class="cell" style="width: 11.00rem; height: 1.51rem;">
+                                    <!-- <p class="paragraph table-paragraph" style="width: 8.16rem; height: 0.91rem; font-size: 0.95rem; left: 41.00rem; top: 0.00rem; text-align: right; color: #767676; font-weight: 400;"> -->
+                                    <p class="paragraph body-text" style="height: 0.91rem; text-align: right;">
+                                    ${{.Rate}}
+                                    <!-- <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 0.00rem; top: -0.00rem;">${{.Rate}}</span> -->
+                                    </p>
+                                </td>
+                                <td rowspan="1" colspan="1" class="cell" style="width: 10.00rem; height: 1.51rem;">
+                                    <!-- <p class="paragraph table-paragraph" style="width: 8.16rem; height: 0.91rem; font-size: 0.95rem; left: 47.25rem; top: 0.00rem; text-align: right; color: #767676; font-weight: 400;"> -->
+                                    <p class="paragraph body-text" style="height: 0.91rem; text-align: right;">
+                                    <!-- <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 0.00rem; top: -0.00rem;">${{.SubTotal}}</span> -->
+                                    ${{.SubTotal}}
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                        {{end}}
+                </table>
+            </div>
+            {{end}}
+        </div>
+        <div class="grid-row">
+            <div class="grid-col grid-col-6">
+            <table class="table" style="width: 16.92rem; height: 7.50rem; table-layout: fixed; z-index: 0; position: absolute; left: 39.50rem; top: 52.59rem; border-collapse: collapse;">
+                        
+                        <tbody>
+                            <tr>
+                            <td style="border: none; height: 0.0rem; width: 9.235rem;"/>
+                            <td style="border: none; height: 0.0rem; width: 7.685rem;"/>
+                            </tr>
+                            {{with .CalculateInvoice}}
+                            <tr>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 9.235rem; height: 1.575rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 6.16rem; height: 0.91rem; font-size: 0.95rem; left: 0.00rem; top: 0.00rem; text-align: right; color: #767676; font-weight: 400;">
+                            <span class="position style" style="width: 0.65rem; height: 0.97rem; left: 2.27rem; top: -0.00rem;">Subtotal:</span>
+                            </p>
+                            </td>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 7.685rem; height: 1.575rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 7.43rem; height: 0.91rem; font-size: 0.95rem; left: 9.24rem; top: 0.00rem; text-align: right; color: #333333; font-weight: 400;">
+                            <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 3.09rem; top: -0.00rem;">${{.SubTotal}}</span>
+                            </p>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 9.235rem; height: 2.175rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 6.16rem; height: 1.51rem; font-size: 0.95rem; left: 0.00rem; top: 1.57rem; text-align: right; color: #767676; font-weight: 400;">
+                            <span class="position style" style="width: 0.60rem; height: 0.97rem; left: 1.90rem; top: 0.60rem;">Tax (7%):</span>
+                            </p>
+                            </td>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 7.685rem; height: 2.175rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 7.44rem; height: 1.51rem; font-size: 0.95rem; left: 9.24rem; top: 2.10rem; text-align: right; color: #333333; font-weight: 400;">
+                            <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 3.91rem; top: 0.00rem;">${{.TaxAmount}}</span>
+                            </p>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 9.235rem; height: 2.175rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 6.16rem; height: 1.51rem; font-size: 0.95rem; left: 0.00rem; top: 3.75rem; text-align: right; color: #767676; font-weight: 400;">
+                            <span class="position style" style="width: 0.60rem; height: 0.97rem; left: 3.70rem; top: 0.60rem;">Total:</span>
+                            </p>
+                            </td>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 7.685rem; height: 2.175rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 7.43rem; height: 1.51rem; font-size: 0.95rem; left: 9.24rem; top: 3.75rem; text-align: right; color: #333333; font-weight: 400;">
+                            <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 3.09rem; top: 0.60rem;">${{.Total}}</span>
+                            </p>
+                            </td>
+                            </tr>
+                            {{end}}
+                            {{with .Customer}}
+                            <tr>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 9.235rem; height: 1.575rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 6.16rem; height: 1.48rem; font-size: 0.95rem; left: 0.00rem; top: 5.92rem; text-align: right; color: #767676; font-weight: 400;">
+                            <span class="position style" style="width: 0.65rem; height: 0.97rem; left: 0.25rem; top: 0.60rem;">Amount Paid:</span>
+                            </p>
+                            </td>
+                            <td rowspan="1" colspan="1" class="cell" style="width: 7.685rem; height: 1.575rem; vertical-align: top;">
+                            <p class="paragraph table-paragraph" style="width: 7.44rem; height: 1.48rem; font-size: 0.95rem; left: 9.24rem; top: 5.92rem; text-align: right; color: #333333; font-weight: 400;">
+                            <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 3.91rem; top: 0.60rem;">${{.AmountPaid}}</span>
+                            </p>
+                            </td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p class="paragraph body-text" style="width: 54.00rem; height: 1.41rem; left: 4.80rem; top: 67.09rem; text-align: left; color: #767676; font-weight: 400;">
+        <span class="position style" style="width: 0.60rem; height: 0.97rem; left: 0.00rem; top: 0.50rem;">Terms:</span>
+    </p>
+    {{with .Customer}}
+    <p class="paragraph body-text" style="width: 54.00rem; height: 1.65rem; left: 5.30rem; top: 68.50rem; text-align: left; color: #333333; font-weight: 400;">
+        <span class="position style" style="width: 0.54rem; height: 0.97rem; left: 3.00rem; top: 1.98rem;">{{.Notes}}</span>
+        <span class="position style" style="width: 0.70rem; height: 0.97rem; left: 3.00rem; top: 0.74rem;">Thank you kindly for your valued business!</span>
+    </p>
     {{end}}
-    <div class="pb2">
-      <div class="flex justify-between mb2">
-        <div class="center">
-          <h1 class="p0 m0 caps">invoice</h1>
-          {{if .ID}}
-            <h4 class="p0 m0 caps secondary">#{{ .ID }}</h4>
-          {{end}}
-        </div>
-        <div class="right-align">
-          <h2 class="p0 m0">{{ .Date.Format "January 2, 2006" }}</h2>
-        </div>
-      </div>
-
-      <div class="flex justify-between my3">
-        {{if .Company}}
-          <div class="center">
-            <h3 class="p0 m0 caps">{{ .Company.Title }}</h3>
-            <h6>Phone:
-              <a href="tel:{{ .Company.Phone }}">
-                {{ .Company.Phone }}
-              </a>
-            </h6>
-          <h6>Email:
-            <a href="mailto:{{ .Company.Email }}">
-              {{ .Company.Email }}
-            </a>
-          </h6>
-        {{end}}
-
-        {{if .Customer}}
-          <div class="right-align">
-          </div>
-        {{end}}
-      </div>
-
-    </div>
-
-    <hr class="dashed">
-
-    <div class="py2 my1">
-      <div class="flex mb2">
-        <div class="col-2 mx2">
-          <h3 class="caps secondary">title</h3>
-        </div>
-        <div class="flex-auto mx2">
-          <h3 class="caps secondary">description</h3>
-        </div>
-        <div class="col-1 mx1">
-          <h3 class="caps secondary">unit</h3>
-        </div>
-        <div class="col-1 mx1">
-          <h3 class="caps secondary">price</h3>
-        </div>
-        <div class="col-1 mx1">
-          <h3 class="caps secondary">tax</h3>
-        </div>
-        <div class="col-1 mx1">
-          <h3 class="caps secondary">total</h3>
-        </div>
-      </div>
-
-      {{range .Items}}
-        <div class="flex my3">
-          <div class="col-2 mx2">
-            <h4>{{ .Title }}</h4>
-          </div>
-          <div class="flex-auto mx2">
-            <h4>{{ .Description }}</h4>
-          </div>
-          <div class="col-1 mx1">
-            <h4>{{ .Quantity }}</h4>
-          </div>
-          <div class="col-1 mx1">
-            <h4>{{ $.Currency }}{{ .Price }}</h4>
-          </div>
-          <div class="col-1 mx1">
-            <h4>{{ .Tax }}%</h4>
-          </div>
-          <div class="col-1 mx1">
-            <h4>{{ $.Currency }}{{ .Total }}</h4>
-          </div>
-        </div>
-      {{end}}
-
-      <div class="flex mt4">
-        <div class="flex-auto mx2">
-          <h4>Total</h4>
-        </div>
-        <div class="col-1 mx1">
-          <h4 class="bold">{{ .Currency }}{{ .Total }}</h4>
-        </div>
-      </div>
-    </div>
-
-    <hr class="dashed">
-  </body>
+</body>
 </html>
